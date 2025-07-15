@@ -1,13 +1,13 @@
 # MySQL 8.0 OCP 英文题库刷题助手
 
 ## 开始使用
-[点我打开（DBA - 908-刷题版）](https://hochenggang.github.io/MySQL-OCP-Brush-Questions-EN/)
+[点我打开（DBA - 908-刷题版）](https://sdxdlgz.github.io/mysql-ocp/)
 
-[点我打开（Developer - 909-刷题版）](https://hochenggang.github.io/MySQL-OCP-Brush-Questions-EN/909.html)
+[点我打开（Developer - 909-刷题版）](https://sdxdlgz.github.io/mysql-ocp/909.html)
 
-[点我打开（908 - 单页打印版）](https://hochenggang.github.io/MySQL-OCP-Brush-Questions-EN/single.html)
+[点我打开（908 - 单页打印版）](https://sdxdlgz.github.io/mysql-ocp/single.html)
 
-[点我打开（909 - 单页打印版）](https://hochenggang.github.io/MySQL-OCP-Brush-Questions-EN/single-909.html)
+[点我打开（909 - 单页打印版）](https://sdxdlgz.github.io/mysql-ocp/single-909.html)
 
 ## 背景
 为了帮助自己更好地备考 MySQL 8.0 OCP 908/909 认证，我精心打造了这款网页版刷题工具。它不仅完善了现有的题库，还优化了用户体验，让备考过程更加高效、便捷。
