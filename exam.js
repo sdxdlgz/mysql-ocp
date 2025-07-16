@@ -38,20 +38,20 @@ const app = Vue.createApp({
       }
 
       this.examTitle = settings.title;
-      this.timeLeft = settings.time;
-
       const savedState = JSON.parse(localStorage.getItem(`exam_state_${this.examType}`));
 
       if (savedState) {
+        // Resume paused exam
         this.questions = savedState.questions;
         this.userAnswers = savedState.userAnswers;
         this.timeLeft = savedState.timeLeft;
         this.currentIndex = savedState.currentIndex;
         this.loading = false;
       } else {
+        // Start new exam
+        this.timeLeft = settings.time;
         await this.fetchQuestions(settings.file, settings.count);
         this.userAnswers = Array(this.questions.length).fill([]);
-        this.saveState();
       }
 
       this.startTimer();
@@ -73,29 +73,47 @@ const app = Vue.createApp({
       return shuffled.slice(0, count);
     },
     startTimer() {
+      clearInterval(this.timer); // Ensure no multiple timers running
       this.timer = setInterval(() => {
-        this.timeLeft--;
-        this.saveState();
-        if (this.timeLeft <= 0) {
+        if (this.timeLeft > 0) {
+          this.timeLeft--;
+        } else {
           clearInterval(this.timer);
           alert('时间到，考试结束！');
-          this.submitExam();
+          this.finalizeExam();
         }
       }, 1000);
     },
     prevQuestion() {
       if (this.currentIndex > 0) {
         this.currentIndex--;
-        this.saveState();
       }
     },
     nextQuestion() {
       if (this.currentIndex < this.questions.length - 1) {
         this.currentIndex++;
-        this.saveState();
+      }
+    },
+    pauseExam() {
+      this.saveState();
+      alert('考试已暂停。您可以随时回来继续。');
+      window.location.href = 'index.html';
+    },
+    exitExam() {
+      if (confirm('确定要退出并结束本次考试吗？您的成绩将被计算。未作答的题目将计为错误。')) {
+        this.finalizeExam();
       }
     },
     submitExam() {
+      const unansweredCount = this.userAnswers.filter(answer => answer.length === 0).length;
+      if (unansweredCount > 0) {
+        if (!confirm(`您还有 ${unansweredCount} 道题未完成，确定要交卷吗？`)) {
+          return;
+        }
+      }
+      this.finalizeExam();
+    },
+    finalizeExam() {
       clearInterval(this.timer);
       const examResult = {
         type: this.examType,
@@ -107,7 +125,7 @@ const app = Vue.createApp({
       };
 
       localStorage.setItem('latest_exam_result', JSON.stringify(examResult));
-      localStorage.removeItem(`exam_state_${this.examType}`);
+      localStorage.removeItem(`exam_state_${this.examType}`); // Clean up saved state
 
       window.location.href = 'result.html';
     },
@@ -126,6 +144,8 @@ const app = Vue.createApp({
   },
   mounted() {
     this.initializeExam();
+    // Save state periodically in case of accidental close
+    setInterval(this.saveState, 5000); 
   },
   beforeUnmount() {
     clearInterval(this.timer);

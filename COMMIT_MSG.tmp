@@ -1,0 +1,9 @@
+feat: Add exam mode
+
+This commit introduces a comprehensive exam mode to the application.
+
+- Two Exam Types: Adds timed exams for both 908 (73 questions, 120 mins) and 909 (65 questions, 90 mins) question sets.
+- Exam Interface: Creates a new exam.html with a countdown timer, question navigation, and a 'submit' button.
+- Result Page: Implements result.html to display a detailed summary after the exam, including score, pass/fail status, and a review of all answers.
+- History & Wrong Answers: Adds a history.html page to review past exam results and a consolidated list of all wrong answers.
+- Persistent Storage: Uses localStorage to save exam state, history, and wrong answers, allowing users to exit and resume exams.

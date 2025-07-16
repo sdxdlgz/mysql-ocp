@@ -1,0 +1,200 @@
+/* Global Styles */
+:root {
+  --primary-color: #42b983;
+  --primary-color-dark: #36a471;
+  --secondary-color: #f0f0f0;
+  --background-color: #f5f7fa;
+  --text-color: #333;
+  --white-color: #fff;
+  --danger-color: #e74c3c;
+  --warning-color: #f39c12;
+  --light-gray-color: #ccc;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 20px;
+  max-width: 960px;
+  margin: auto;
+  line-height: 1.6;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-color-dark);
+}
+
+/* Layout & Cards */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.box, .card {
+  background-color: var(--white-color);
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+}
+
+/* Buttons */
+.control-button, button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: var(--white-color) !important; /* Important to override visited styles */
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.9rem;
+  text-decoration: none; /* Ensure links styled as buttons don't have underlines */
+}
+
+.control-button:hover, button:hover {
+  background-color: var(--primary-color-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.control-button:disabled, button:disabled {
+  background-color: var(--light-gray-color);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.button-secondary {
+    background-color: #7f8c8d;
+}
+
+.button-secondary:hover {
+    background-color: #6c7a7b;
+}
+
+.button-danger {
+    background-color: var(--danger-color);
+}
+.button-danger:hover {
+    background-color: #c0392b;
+}
+
+
+/* Fix for visited link-buttons */
+a.control-button:visited {
+  color: var(--white-color) !important;
+}
+
+/* Form Elements */
+.selection-label {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.selection-label:hover {
+  background-color: #f9f9f9;
+}
+
+input[type=checkbox] {
+  width: 18px;
+  height: 18px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+/* Markdown & Code */
+pre, code {
+  background-color: #e8f5e9; /* Light green background */
+  color: #1b5e20; /* Dark green text */
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+pre {
+  padding: 1rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 1rem 0;
+  border: 1px solid #a5d6a7;
+}
+
+/* Result & Status Styles */
+.correct {
+  color: #2e7d32; /* Darker Green */
+  font-weight: bold;
+}
+
+.wrong {
+  color: var(--danger-color);
+  font-weight: bold;
+}
+
+.selection-label.correct {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.selection-label.wrong {
+    background-color: #ffebee;
+    border-left: 4px solid var(--danger-color);
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1rem;
+}
+
+thead {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: #fafafa;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Header */
+h2 {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
