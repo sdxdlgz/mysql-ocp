@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>考试结果 - MySQL OCP</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      outline: none;
+      background-color: transparent;
+      list-style: circle;
+      line-height: 1.5rem;
+
+    }
+
+    body {
+      font-family: "微软雅黑", sans-serif;
+      background-color: #f5f7fa;
+      padding: 20px;
+      max-width: 960px;
+      margin: auto;
+      background-color: #eeeeee;
+      color: #1a1a1a;
+
+
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .control-button {
+      margin-right: 0.5rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #42b983;
+      color: white;
+      font-weight: bold;
+    }
+
+
+    .box {
+      background-color: #fafafa;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+    }
+
+    .option {
+      margin: 8px 0;
+    }
+
+    pre,
+    code {
+      background-color: rgba(0, 128, 0, 0.05);
+      color: green;
+      padding: 0.25rem;
+
+    }
+
+    pre {
+      padding: 0.5rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin: 0.25rem 0;
+      border: 1px solid green;
+    }
+
+    code {
+      line-height: 1.5rem;
+      margin: 0 0.1rem;
+    }
+
+    pre code {
+      background-color: transparent;
+
+      padding: 0;
+    }
+
+
+
+    button {
+      padding: 0.35rem 0.75rem;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    input[type=checkbox] {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+      color: #1a1a1a;
+
+    }
+
+    a:visited {
+      color: #1a1a1a;
+    }
+
+
+    .correct {
+      color: green;
+    }
+
+    .partial {
+      color: orange;
+    }
+
+    .wrong {
+      color: red;
+    }
+
+
+    ul,
+    ol {
+      padding-left: 1rem;
+    }
+
+    li {
+      padding-top: 0.5rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* 表格头部样式 */
+    thead {
+      background-color: #f2f2f2;
+      color: #000;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* 奇数行背景色 */
+    tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+
+    /* 鼠标悬停时的行背景色 */
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* 表格头部的字体样式 */
+    th {
+      font-weight: bold;
+    }
+
+    .box {
+      margin-top: 1rem;
+    }
+
+    .selection-label {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      line-height: 1.5;
+      word-break: break-word;
+      cursor: pointer;
+      padding: 0.5rem 0.25rem;
+
+    }
+
+    .selection-label:hover {
+      background-color: #ebebeb;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: auto auto 1fr;
+      /* input | key | body */
+      align-items: baseline;
+      /* 让文字基线对齐 */
+      gap: 8px;
+      /* 可选：增加一点间距 */
+    }
+
+    /* 可选美化 */
+    .selection-key {
+      white-space: nowrap;
+      /* ���止 key 换行 */
+      font-weight: bold;
+      margin-right: 0.25rem;
+    }
+
+    .selection-body {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .selection-body p {
+      margin: 0;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #8e8e8e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: lighter;
+
+    }
+
+    label * {
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="controls">
+      <h2>考试结果 - {{ result.title }}</h2>
+      <a href="index.html">返回主页</a>
+    </div>
+
+    <div class="box">
+      <h3>考试总结</h3>
+      <p><strong>考试日期:</strong> {{ new Date(result.date).toLocaleString() }}</p>
+      <p><strong>总耗时:</strong> {{ Math.floor(result.timeSpent / 60) }} 分 {{ result.timeSpent % 60 }} 秒</p>
+      <p><strong>总分:</strong> {{ score.toFixed(2) }} / 100</p>
+      <p><strong>正确率:</strong> {{ accuracy.toFixed(2) }}%</p>
+      <p><strong>结果:</strong> <span :class="passed ? 'correct' : 'wrong'">{{ passed ? '通过' : '未通过' }}</span> (正确率需达到 62% )</p>
+    </div>
+
+    <div class="box">
+      <h3>题目详情</h3>
+      <div v-for="(question, index) in result.questions" :key="index" class="box">
+        <p><strong>题目 {{ index + 1 }}:</strong></p>
+        <div v-html="renderMarkdown(question.question)"></div>
+        <div v-for="(text, key) in question.selections" :key="key">
+          <label class="selection-label grid-layout"
+            :class="{ correct: isCorrect(key, index), wrong: isWrong(key, index) }">
+            <input type="checkbox" :value="key" :checked="isUserSelected(key, index)" disabled>
+            <strong class="selection-key">{{ key }}: </strong>
+            <div class="selection-body" v-html="renderMarkdown(text)"></div>
+          </label>
+        </div>
+        <div class="box">
+          <p><strong>你的答案:</strong> {{ result.userAnswers[index].join(', ') || '未作答' }}</p>
+          <p><strong>正确答案:</strong> {{ question.answers.join(', ') }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/marked@15.0.11/marked.min.js"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          result: null,
+          score: 0,
+          accuracy: 0,
+          passed: false
+        };
+      },
+      created() {
+        this.loadResult();
+        this.calculateScore();
+        this.saveToHistory();
+      },
+      methods: {
+        loadResult() {
+          const resultData = localStorage.getItem('latest_exam_result');
+          if (resultData) {
+            this.result = JSON.parse(resultData);
+          } else {
+            alert('没有找到考试结果');
+            window.location.href = 'index.html';
+          }
+        },
+        calculateScore() {
+          let correctCount = 0;
+          this.result.questions.forEach((q, index) => {
+            const user = [...this.result.userAnswers[index]].sort();
+            const correct = [...q.answers].sort();
+            if (JSON.stringify(user) === JSON.stringify(correct)) {
+              correctCount++;
+            }
+          });
+          this.accuracy = (correctCount / this.result.questions.length) * 100;
+          this.score = this.accuracy;
+          this.passed = this.accuracy >= 62;
+        },
+        saveToHistory() {
+          const history = JSON.parse(localStorage.getItem('exam_history') || '[]');
+          history.unshift(this.result); // Add to the beginning
+          localStorage.setItem('exam_history', JSON.stringify(history));
+
+          // Save wrong questions
+          const wrongQuestions = JSON.parse(localStorage.getItem('ocp_wrong_questions') || '[]');
+          this.result.questions.forEach((q, index) => {
+            const user = [...this.result.userAnswers[index]].sort();
+            const correct = [...q.answers].sort();
+            if (JSON.stringify(user) !== JSON.stringify(correct)) {
+              const exists = wrongQuestions.some(item => item.question === q.question);
+              if (!exists) {
+                wrongQuestions.push(q);
+              }
+            }
+          });
+          localStorage.setItem('ocp_wrong_questions', JSON.stringify(wrongQuestions));
+        },
+        isCorrect(key, index) {
+          const question = this.result.questions[index];
+          return question.answers.includes(key);
+        },
+        isWrong(key, index) {
+          const question = this.result.questions[index];
+          const userAnswer = this.result.userAnswers[index];
+          return userAnswer.includes(key) && !question.answers.includes(key);
+        },
+        isUserSelected(key, index) {
+          return this.result.userAnswers[index].includes(key);
+        },
+        renderMarkdown(markdown) {
+          return marked.parse(markdown);
+        }
+      }
+    });
+    app.mount('#app');
+  </script>
+</body>
+
+</html>

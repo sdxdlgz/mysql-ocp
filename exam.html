@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>考试模式 - MySQL OCP</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      outline: none;
+      background-color: transparent;
+      list-style: circle;
+      line-height: 1.5rem;
+
+    }
+
+    body {
+      font-family: "微软雅黑", sans-serif;
+      background-color: #f5f7fa;
+      padding: 20px;
+      max-width: 960px;
+      margin: auto;
+      background-color: #eeeeee;
+      color: #1a1a1a;
+
+
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .control-button {
+      margin-right: 0.5rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #42b983;
+      color: white;
+      font-weight: bold;
+    }
+
+
+    .box {
+      background-color: #fafafa;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+    }
+
+    .option {
+      margin: 8px 0;
+    }
+
+    pre,
+    code {
+      background-color: rgba(0, 128, 0, 0.05);
+      color: green;
+      padding: 0.25rem;
+
+    }
+
+    pre {
+      padding: 0.5rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin: 0.25rem 0;
+      border: 1px solid green;
+    }
+
+    code {
+      line-height: 1.5rem;
+      margin: 0 0.1rem;
+    }
+
+    pre code {
+      background-color: transparent;
+
+      padding: 0;
+    }
+
+
+
+    button {
+      padding: 0.35rem 0.75rem;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    input[type=checkbox] {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+      color: #1a1a1a;
+
+    }
+
+    a:visited {
+      color: #1a1a1a;
+    }
+
+
+    .correct {
+      color: green;
+    }
+
+    .partial {
+      color: orange;
+    }
+
+    .wrong {
+      color: rgb(255, 184, 184);
+    }
+
+
+    ul,
+    ol {
+      padding-left: 1rem;
+    }
+
+    li {
+      padding-top: 0.5rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* 表格头部样式 */
+    thead {
+      background-color: #f2f2f2;
+      color: #000;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* 奇数行背景色 */
+    tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+
+    /* 鼠标悬停时的行背景色 */
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* 表格头部的字体样式 */
+    th {
+      font-weight: bold;
+    }
+
+    .box {
+      margin-top: 1rem;
+    }
+
+    .selection-label {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      line-height: 1.5;
+      word-break: break-word;
+      cursor: pointer;
+      padding: 0.5rem 0.25rem;
+
+    }
+
+    .selection-label:hover {
+      background-color: #ebebeb;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: auto auto 1fr;
+      /* input | key | body */
+      align-items: baseline;
+      /* 让文字基线对齐 */
+      gap: 8px;
+      /* 可选：增加一点间距 */
+    }
+
+    /* 可选美化 */
+    .selection-key {
+      white-space: nowrap;
+      /* 防止 key 换行 */
+      font-weight: bold;
+      margin-right: 0.25rem;
+    }
+
+    .selection-body {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .selection-body p {
+      margin: 0;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #8e8e8e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: lighter;
+
+    }
+
+    label * {
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="controls">
+      <h2>考试模式 - {{ examTitle }}</h2>
+      <div>
+        <span>倒计时: {{ formatTime }}</span>
+        <a href="index.html" style="margin-left: 1rem;">退出考试</a>
+      </div>
+    </div>
+
+    <div v-if="loading">
+      <p>正在生成试卷...</p>
+    </div>
+
+    <div v-if="currentQuestion && !loading">
+      <div class="box">
+        <span>{{ currentIndex + 1 }}/{{ questions.length }}</span>
+        <div v-html="renderMarkdown(currentQuestion.question)"></div>
+        <br />
+        <div v-for="(text, key) in currentQuestion.selections" :key="key" class="options">
+          <label class="selection-label grid-layout">
+            <input type="checkbox" v-model="userAnswers[currentIndex]" :value="key" />
+            <strong class="selection-key">{{ key }}: </strong>
+            <div class="selection-body" v-html="renderMarkdown(text)"></div>
+          </label>
+        </div>
+        <br />
+        <button @click="prevQuestion" :disabled="currentIndex === 0">上一题</button>
+        <button @click="nextQuestion" :disabled="currentIndex === questions.length - 1">下一题</button>
+        <button @click="submitExam" style="background-color: #42b983; color: white;">交卷</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/marked@15.0.11/marked.min.js"></script>
+  <script src="exam.js"></script>
+</body>
+
+</html>
